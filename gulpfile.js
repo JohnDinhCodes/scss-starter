@@ -18,13 +18,13 @@ gulp.task('watch', ['styles'], () => {
         browserSync.reload();
     })
 
-    gulp.watch('./app/sass/**/*.scss', () => {
+    gulp.watch('./app/assets/sass/**/*.scss', () => {
         gulp.start('cssInject');
     })
 });
 
 gulp.task('styles', () => {
-    return gulp.src('./app/sass/**/*.scss')
+    return gulp.src('./app/assets/sass/**/*.scss')
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer({ // COULD PROBABLY ONLY USE THIS WHEN BUILDING
@@ -32,11 +32,11 @@ gulp.task('styles', () => {
         cascade: false
     }))
     .pipe(cssnano()) // COULD PROBABLY ONLY USE THIS WHEN BUILDING
-    .pipe(gulp.dest('./app/assets/css'));
+    .pipe(gulp.dest('./app/assets/sass'));
 });
 
 gulp.task('cssInject', ['styles'], () => {
-    return gulp.src('./app/assets/css/main.css')
+    return gulp.src('./app/assets/sass/main.css')
     .pipe(browserSync.stream());
     
 })
