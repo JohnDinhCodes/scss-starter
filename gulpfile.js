@@ -4,6 +4,7 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 const cssnano = require('gulp-cssnano');
+const webpack = require('webpack');
 
 
 gulp.task('watch', ['styles'], () => {
@@ -23,6 +24,12 @@ gulp.task('watch', ['styles'], () => {
     })
 });
 
+gulp.task('cssInject', ['styles'], () => {
+    return gulp.src('./app/assets/sass/main.css')
+    .pipe(browserSync.stream());
+    
+})
+
 gulp.task('styles', () => {
     return gulp.src('./app/assets/sass/**/*.scss')
     .pipe(sourcemaps.init({loadMaps: true}))
@@ -35,8 +42,10 @@ gulp.task('styles', () => {
     .pipe(gulp.dest('./app/assets/sass'));
 });
 
-gulp.task('cssInject', ['styles'], () => {
-    return gulp.src('./app/assets/sass/main.css')
-    .pipe(browserSync.stream());
-    
-})
+gulp.task('scripts', (callback) => {
+    webpack(require('./webpack.config'), (err, stats) => {
+        err ? console.log(err.toString()) :
+        console.log(stats.toString());
+        callback()
+    });
+});
